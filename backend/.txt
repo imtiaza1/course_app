@@ -1,0 +1,35 @@
+/backend
+│
+├── config/
+│   └── db.js               # MongoDB connection setup
+│
+├── controllers/
+│   ├── authController.js   # Login, Register, JWT
+│   ├── userController.js   # Get/update user profile
+│   ├── courseController.js # Create, update, delete, fetch courses
+│   └── orderController.js  # Manage purchases
+│
+├── models/
+│   ├── User.js             # User schema
+│   ├── Course.js           # Course schema
+│   └── Order.js            # Order/payment schema
+│
+├── routes/
+│   ├── authRoutes.js       # /api/auth
+│   ├── userRoutes.js       # /api/users
+│   ├── courseRoutes.js     # /api/courses
+│   └── orderRoutes.js      # /api/orders
+│
+├── middleware/
+│   ├── authMiddleware.js   # Protect routes (JWT)
+│   └── errorMiddleware.js  # Custom error handler
+│
+├── utils/
+│   └── generateToken.js    # JWT generation
+│
+├── uploads/
+│   └── (course images/videos)
+│
+├── .env                    # Secrets (JWT, DB URL, etc.)
+├── server.js               # Entry point
+└── package.json
