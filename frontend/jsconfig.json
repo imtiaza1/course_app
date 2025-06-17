@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Required for absolute imports
+    "paths": {
+      "@/*": ["src/*"] // If you want to use @/ for imports
+    }
+  },
+  "include": ["src"]
+}
