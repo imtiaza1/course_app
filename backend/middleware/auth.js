@@ -14,7 +14,7 @@ export const signInValidate = (req, res, next) => {
     next(); // continue to controller
   } catch (err) {
     return res.status(400).json({
-      success: false,
+      error: true,
       message: err.errors?.[0]?.message || "Validation failed",
     });
   }
@@ -32,7 +32,7 @@ export const loginValidate = (req, res, next) => {
     next(); // continue to controller
   } catch (err) {
     return res.status(400).json({
-      success: false,
+      error: true,
       message: err.errors?.[0]?.message || "Validation failed",
     });
   }
