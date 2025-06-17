@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import fileUpload from "express-fileupload";
@@ -9,13 +10,17 @@ import courseRouter from "./routes/course.js";
 import orderRouter from "./routes/order.js";
 import userRouter from "./routes/users.js";
 const app = express();
+// Load environment variables from .env file
+dotenv.config();
 // Middleware to parse JSON request bodies
 app.use(express.json());
 app.use(cookieParser());
-
-// Load environment variables from .env file
-dotenv.config();
-
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 // Connect to MongoDB
 db();
 
