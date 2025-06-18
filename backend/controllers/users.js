@@ -84,12 +84,14 @@ export const signInUser = async (req, res) => {
     // generate jwt token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.cookie("token", token);
+    // 4. Remove password from user before sending
+    const { password: _, ...userWithoutPassword } = user._doc;
     // Send success response
     res.status(200).json({
       success: true,
       message: "Login successful",
       token,
-      user: user,
+      user: userWithoutPassword,
     });
   } catch (error) {
     console.error("Login Error:", error);
@@ -112,6 +114,19 @@ export const logOutUser = async (req, res) => {
     res.status(400).json({
       error: true,
       message: "error while logout user",
+    });
+  }
+};
+
+// get a single user using token
+export const getUser = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const user = await User.findById(userId);
+    res.status(200).json({ user: user });
+  } catch (error) {
+    res.status(401).json({
+      message: "user not found",
     });
   }
 };
