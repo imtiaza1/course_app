@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { SiCoursera } from "react-icons/si";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logout } from "../redux/authSlice";
 
 const Nav = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
@@ -11,8 +15,12 @@ const Nav = () => {
     { name: "Courses", to: "/course" },
     { name: "About", to: "/about" },
     { name: "Contact", to: "/contact" },
-    { name: "Login", to: "/login", special: true },
-    { name: "Sign Up", to: "/signup", special: true },
+    ...(!user
+      ? [
+          { name: "Login", to: "/login", special: true },
+          { name: "Sign Up", to: "/signup", special: true },
+        ]
+      : [{ name: "Logout", to: "#", special: true, logout: true }]),
   ];
 
   return (
@@ -33,7 +41,14 @@ const Nav = () => {
           {links.map((link) => (
             <li key={link.name}>
               <Link
-                to={link.to}
+                to={link.logout ? "/" : link.to}
+                onClick={() => {
+                  if (link.logout) {
+                    // Clear Redux state and cookie
+                    dispatch(logout());
+                  }
+                  setIsOpen(false);
+                }}
                 className={`px-4 py-2 rounded-md transition ${
                   link.special
                     ? "border border-green-400 hover:bg-green-500 hover:text-white"
