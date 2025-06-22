@@ -1,6 +1,9 @@
 // src/components/FeaturedCourses.jsx
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -9,7 +12,7 @@ import Loader from "./Loader";
 const FeaturedCourses = () => {
   const [course, setCourse] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { user } = useSelector((state) => state.auth);
   // Fetching course
   const getCourse = async () => {
     try {
@@ -79,12 +82,31 @@ const FeaturedCourses = () => {
                       {course.description?.slice(0, 80)}...
                     </p>
                     <div className="flex items-center justify-center mt-3 gap-2">
-                      <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-medium transition">
-                        Enroll
-                      </button>
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded text-xs font-medium transition">
+                      {user ? (
+                        <Link
+                          to={`/enroll/${course._id}`}
+                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-medium transition"
+                        >
+                          Enroll
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            toast.error(
+                              "Please log in to access the enroll page"
+                            )
+                          }
+                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-medium transition"
+                        >
+                          Enroll
+                        </button>
+                      )}
+                      <Link
+                        to={`/coursedetails/${course._id}`}
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded text-xs font-medium transition"
+                      >
                         Details
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
