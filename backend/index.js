@@ -8,6 +8,7 @@ import db from "./config/db.js";
 import adminRouter from "./routes/admin.js";
 import courseRouter from "./routes/course.js";
 import orderRouter from "./routes/order.js";
+import paymentRouter from "./routes/payment.js";
 import userRouter from "./routes/users.js";
 const app = express();
 // Load environment variables from .env file
@@ -30,6 +31,14 @@ cloudinary.config({
   api_key: process.env.api_key,
   api_secret: process.env.api_secret,
 });
+// ✅ Content Security Policy (add this BEFORE routes)
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "script-src 'self' https://js.stripe.com https://m.stripe.network; object-src 'none';"
+  );
+  next();
+});
 
 app.use(
   fileUpload({
@@ -42,6 +51,7 @@ app.use("/api/v1/course", courseRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/payment", paymentRouter);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

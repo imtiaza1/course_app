@@ -69,3 +69,26 @@ export const getUserOrders = async (req, res) => {
     });
   }
 };
+// check if course already but it or not
+export const isCoursePurchased = async (req, res) => {
+  const { courseId } = req.params;
+  const userId = req.user?.id;
+
+  try {
+    const existingOrder = await Order.findOne({ courseId, userId }); // ✅ include userId
+    if (existingOrder) {
+      return res.status(200).json({
+        purchased: true,
+      });
+    } else {
+      return res.status(200).json({
+        purchased: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: "Error checking course purchase",
+    });
+  }
+};
